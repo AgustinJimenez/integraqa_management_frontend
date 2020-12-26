@@ -4,6 +4,7 @@ const withPlugins = require('next-compose-plugins')
 const optimizedImages = require('next-optimized-images')
 const withFonts = require('next-fonts')
 const withOffline = require('next-offline')
+const withImages = require('next-images')
 
 let config = {
     orkboxOpts: {
@@ -62,5 +63,6 @@ config = withBundleAnalyzer(config)
 config = withPlugins([[optimizedImages, config]])
 config = withFonts(config)
 config = withOffline(config)
+config = withImages(config)
 
 module.exports = config
