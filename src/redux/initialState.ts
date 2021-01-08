@@ -1,9 +1,8 @@
 const initialState: any = {
     datasets: {
-        meals: {},
-        search_input: '',
-        searched_meals: [],
-        search_meal_filter: 'name',
+        csrf_token: null,
+        user_has_auth: false,
+        is_loading_login_submit: false,
     },
 }
 

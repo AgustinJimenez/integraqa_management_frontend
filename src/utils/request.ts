@@ -1,20 +1,44 @@
 //import fetch from 'isomorphic-unfetch'
-import axios, { AxiosRequestConfig } from 'axios'
-import { domain } from '../api'
+import { AxiosRequestConfig } from 'axios'
+import { axiosInstance } from '../providers/AxiosProvider'
+import { OK } from 'http-status'
+import { showToast } from './showToast'
 
-const axiosInstance = axios.create({
-    baseURL: domain,
-    timeout: 5000,
-    responseType: 'json',
-    //headers: {'X-Custom-Header': 'foobar'}
-})
+const { toast } = require('react-nextjs-toast')
 
-const request = async (options: AxiosRequestConfig) => {
-    //console.log('REQUEST-REQUEST ===> ', { options })
-    let response = await axiosInstance.request(options)
-    //console.log('REQUEST-RESPONSE ===> ', { response })
-    if (response.status !== 200) return { error: true, data: null, message: response.statusText }
-    return { error: false, data: response.data, message: response.statusText }
+export interface Response {
+    data: any;
+    error: boolean;
+    message: string;
+    response: any;
+}
+
+export interface Options extends AxiosRequestConfig {
+    show_message: boolean;
+}
+
+const debug: boolean = false
+
+const request = async (options: Options = { show_message: false }) => {
+    var result: Response = { data: null, error: false, message: '', response: null }
+    try {
+        if (debug) console.log(`<=== === REQUEST === ===> [${options.url}]`, { ...options })
+        let response = await axiosInstance.request(options)
+        if (debug) console.log(`<=== === RESPONSE === ===> [${options.url}]`, { response, options })
+        if (response?.status === OK) result = { error: false, data: response?.data, message: response?.statusText, response }
+        else result = { error: true, data: response?.data, message: response?.statusText, response }
+    } catch (error) {
+        console.log(`<=== === ERROR-CATCHED === ===> [${options.url}]`, { error, error_json: error.toJSON() })
+        if (!!error?.response?.config) result = { error: true, message: error.message, data: error?.response?.data || null, response: error?.response }
+        else result = { error: true, message: error.message, data: error, response: error?.response }
+
+        if (!!result['message'] && options?.['show_message'])
+            showToast({ message: result['message'], type: !!error ? 'error' : 'info', title: !!error ? 'ERROR:' : 'INFO:' })
+    }
+
+    if (debug) console.log(`<=== === RESULT === ===> [${options.url}]`, { result })
+
+    return result
 }
 
 export default request
