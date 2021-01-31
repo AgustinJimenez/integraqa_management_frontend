@@ -15,16 +15,15 @@ export interface Response {
 
 export interface Options extends AxiosRequestConfig {
     show_message: boolean;
+    debug: boolean;
 }
 
-const debug: boolean = false
-
-const request = async (options: Options = { show_message: false }) => {
+const request = async (options: Options = { show_message: false, debug: false }) => {
     var result: Response = { data: null, error: false, message: '', response: null }
     try {
-        if (debug) console.log(`<=== === REQUEST === ===> [${options.url}]`, { ...options })
+        if (options.debug) console.log(`<=== === REQUEST === ===> [${options.url}]`, { ...options })
         let response = await axiosInstance.request(options)
-        if (debug) console.log(`<=== === RESPONSE === ===> [${options.url}]`, { response, options })
+        if (options.debug) console.log(`<=== === RESPONSE === ===> [${options.url}]`, { response, options })
         if (response?.status === OK) result = { error: false, data: response?.data, message: response?.statusText, response }
         else result = { error: true, data: response?.data, message: response?.statusText, response }
     } catch (error) {
@@ -36,7 +35,7 @@ const request = async (options: Options = { show_message: false }) => {
             showToast({ message: result['message'], type: !!error ? 'error' : 'info', title: !!error ? 'ERROR:' : 'INFO:' })
     }
 
-    if (debug) console.log(`<=== === RESULT === ===> [${options.url}]`, { result })
+    if (options.debug) console.log(`<=== === RESULT === ===> [${options.url}]`, { result })
 
     return result
 }

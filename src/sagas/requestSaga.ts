@@ -20,14 +20,15 @@ export function* request(options: Options): object {
 
     options.headers = {
         ...options.headers,
-        //'Authorization': "Bearer " + token,
+        Authorization: `Bearer ${csrf_token}`,
         'Content-Type': 'application/json',
-        //'Access-Control-Allow-Origin': '*',
-        //'Access-Control-Allow-Headers': '*',
         Accept: 'application/json, text/plain',
         'X-Requested-With': 'XMLHttpRequest',
     }
-    if (!!csrf_token) options.headers['X-XSRF-TOKEN'] = csrf_token
+    if (!!csrf_token) {
+        options.headers['X-XSRF-TOKEN'] = csrf_token
+        options.headers['Authorization'] = csrf_token
+    }
 
     let result: Response = yield call(http_request, options)
 

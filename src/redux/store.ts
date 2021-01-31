@@ -7,10 +7,12 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from './storage'
 import createSagaMiddleware from 'redux-saga'
 import sagas from '../sagas'
+import { show_redux_logs } from '../../env.json'
 
 const persistConfig = {
     key: 'root',
     storage,
+    timeout: undefined,
 }
 const persistedReducer = persistReducer(persistConfig, reducer)
 
@@ -20,7 +22,7 @@ function initStore(preloadedState = initialState) {
     const sagaMiddleware = createSagaMiddleware()
     const middlewares = [sagaMiddleware]
 
-    if (process.env.NODE_ENV === `development`) {
+    if (process.env.NODE_ENV === `development` && show_redux_logs) {
         const { logger } = require(`redux-logger`)
         middlewares.push(logger)
     }

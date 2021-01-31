@@ -13,6 +13,7 @@ function* loginSaga({ email, password, rememberMe }: any = {}) {
     let csrf_response = yield call(request, {
         baseURL: api_domain,
         url: '/sanctum/csrf-cookie',
+        debug: true,
     })
     if (csrf_response['error'] && csrf_response['response']['status'] !== NO_CONTENT) return
     if (!!csrf_response?.response?.config?.headers?.['X-XSRF-TOKEN'])
@@ -21,7 +22,7 @@ function* loginSaga({ email, password, rememberMe }: any = {}) {
     let login_response: any = yield call(request, {
         method: 'POST',
         url: '/login',
-        //debug: true,
+        debug: true,
         data: {
             email,
             password,
@@ -42,8 +43,20 @@ function* loginSaga({ email, password, rememberMe }: any = {}) {
         }
         return
     }
+
+    let user_response: any = yield call(request, {
+        url: '/user',
+        debug: true,
+    })
+    console.log('HERE ===> ', { ...user_response })
+
     yield put(setDatasetToReducer(true, 'user_has_auth'))
     Router.replace('/dashboard')
+    showToast({
+        message: 'Access granted',
+        title: 'INFO:',
+        type: 'success',
+    })
 }
 
 export default function* saga() {

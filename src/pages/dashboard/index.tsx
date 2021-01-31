@@ -1,7 +1,21 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import AdminLayout from '../../layouts/AdminLayout'
+import { requestSagaAction } from '../../sagas/actions'
 
 const LoginPage = (props: any) => {
+    const dispatch = useDispatch()
+
+    React.useEffect(() => {
+        dispatch(
+            requestSagaAction({
+                url: 'user',
+                show_message: true,
+                debug: true,
+            }),
+        )
+    }, [])
+
     return <AdminLayout></AdminLayout>
 }
 

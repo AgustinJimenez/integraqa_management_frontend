@@ -78,4 +78,7 @@ export default makeStyles(theme => ({
     fixedHeight: {
         height: 240,
     },
+    zIndex1202: {
+        zIndex: 1202,
+    },
 }))

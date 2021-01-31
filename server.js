@@ -20,6 +20,6 @@ app.prepare().then(() => {
             handle(req, res, parsedUrl)
         }
     }).listen(3000, () => {
-        console.log(`> Ready on http://127.0.0.1:${3000}`)
+        console.log(`\n\n> Ready on http://127.0.0.1:${3000}`)
     })
 })
