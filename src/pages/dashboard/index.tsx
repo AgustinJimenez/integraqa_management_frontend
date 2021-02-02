@@ -6,15 +6,7 @@ import { requestSagaAction } from '../../sagas/actions'
 const LoginPage = (props: any) => {
     const dispatch = useDispatch()
 
-    React.useEffect(() => {
-        dispatch(
-            requestSagaAction({
-                url: 'user',
-                show_message: true,
-                debug: true,
-            }),
-        )
-    }, [])
+    React.useEffect(() => {}, [])
 
     return <AdminLayout></AdminLayout>
 }

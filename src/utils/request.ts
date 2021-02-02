@@ -27,7 +27,7 @@ const request = async (options: Options = { show_message: false, debug: false })
         if (response?.status === OK) result = { error: false, data: response?.data, message: response?.statusText, response }
         else result = { error: true, data: response?.data, message: response?.statusText, response }
     } catch (error) {
-        console.log(`<=== === ERROR-CATCHED === ===> [${options.url}]`, { error, error_json: error.toJSON() })
+        console.error(`<=== === ERROR-CATCHED === ===> [${options.url}]`, { error, error_json: error.toJSON() })
         if (!!error?.response?.config) result = { error: true, message: error.message, data: error?.response?.data || null, response: error?.response }
         else result = { error: true, message: error.message, data: error, response: error?.response }
 

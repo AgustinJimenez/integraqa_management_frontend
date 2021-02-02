@@ -49,12 +49,12 @@ function ListItemLink(props) {
 
 const AdminLayout = ({ children }) => {
     const dispatch = useDispatch()
-    const user_has_auth = useSelector(state => datasetSelector(state, 'user_has_auth'))
-
+    /* 
+    const auth_token = useSelector(state => datasetSelector(state, 'auth_token'))
     React.useEffect(() => {
-        if (!user_has_auth) Router.replace('/login')
-    }, [user_has_auth])
-
+        if (!auth_token) Router.replace('/login')
+    }, [auth_token])
+ */
     const classes = styles()
     const [open, setOpen] = React.useState(true)
     const handleDrawerOpen = React.useCallback(() => setOpen(true))

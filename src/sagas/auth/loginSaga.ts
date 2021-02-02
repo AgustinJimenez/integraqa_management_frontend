@@ -10,53 +10,37 @@ import { showToast } from '../../utils/showToast'
 import capitalizeWords from '../../utils/capitalizeWords'
 
 function* loginSaga({ email, password, rememberMe }: any = {}) {
-    let csrf_response = yield call(request, {
-        baseURL: api_domain,
-        url: '/sanctum/csrf-cookie',
-        debug: true,
-    })
-    if (csrf_response['error'] && csrf_response['response']['status'] !== NO_CONTENT) return
-    if (!!csrf_response?.response?.config?.headers?.['X-XSRF-TOKEN'])
-        yield put(setDatasetToReducer(csrf_response.response.config.headers['X-XSRF-TOKEN'], 'csrf_token'))
-
-    let login_response: any = yield call(request, {
+    var { data, error, message }: any = yield call(request, {
         method: 'POST',
-        url: '/login',
-        debug: true,
+        url: '/auth/login',
+        //debug: true,
         data: {
             email,
             password,
         },
     })
-    if (login_response.error) {
-        if (login_response?.response?.status === UNPROCESSABLE_ENTITY) {
-            let errors = login_response?.data?.errors || {}
-            let errorMessage = Object.keys(errors)
-                .map(fieldName => `${capitalizeWords(fieldName)}: ${errors[fieldName].join('\n')}`)
-                .join('\n')
 
-            showToast({
-                message: errorMessage,
-                title: login_response?.data?.message,
-                type: 'error',
-            })
-        }
+    if (error) {
+        showToast({
+            message: message,
+            //title: login_response?.message,
+            type: 'error',
+        })
         return
     }
+    yield put(setDatasetToReducer(data?.access_token, 'auth_token'))
 
-    let user_response: any = yield call(request, {
-        url: '/user',
-        debug: true,
+    var { data, error, message }: any = yield call(request, {
+        url: '/auth/me',
+        //debug: true,
     })
-    console.log('HERE ===> ', { ...user_response })
-
-    yield put(setDatasetToReducer(true, 'user_has_auth'))
-    Router.replace('/dashboard')
+    yield put(setDatasetToReducer(data, 'user'))
     showToast({
         message: 'Access granted',
         title: 'INFO:',
         type: 'success',
     })
+    Router.replace('/dashboard')
 }
 
 export default function* saga() {

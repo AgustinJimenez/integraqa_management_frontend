@@ -16,7 +16,7 @@ function* logoutSaga() {
         debug: true,
     })
 
-    yield put(setDatasetToReducer(false, 'user_has_auth'))
+    yield put(setDatasetToReducer(null, 'auth_token'))
     Router.replace('/login')
 }
 

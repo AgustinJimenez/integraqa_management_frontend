@@ -1,7 +1,7 @@
 const initialState: any = {
     datasets: {
-        csrf_token: null,
-        user_has_auth: false,
+        auth_token: null,
+        user: null,
         is_loading_login_submit: false,
     },
 }

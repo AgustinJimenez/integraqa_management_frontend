@@ -25,12 +25,13 @@ const Copyright = () => (
 
 const AuthLayout = () => {
     const classes = useStyles()
-    const user_has_auth = useSelector(state => datasetSelector(state, 'user_has_auth'))
+    /* 
+    const auth_token = useSelector(state => datasetSelector(state, 'auth_token'))
     React.useEffect(() => {
-        if (!user_has_auth) Router.replace('/login')
+        if (!auth_token) Router.replace('/login')
         else Router.replace('/dashboard')
-    }, [user_has_auth])
-
+    }, [auth_token])
+ */
     return (
         <Container component='main' maxWidth='xs'>
             <CssBaseline />
