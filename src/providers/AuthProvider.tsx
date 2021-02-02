@@ -15,9 +15,9 @@ const AuthProvider = ({ children }: any) => {
             .reverse()
 
         let url_slug = url_nodes?.[0]
-
-        if ((url_slug === 'login' || url_slug === 'register') && !!auth_token) Router.replace('/dashboard')
-        else if ((url_slug !== 'login' || url_slug !== 'register') && !auth_token) Router.replace('/login')
+        let url_slug_dont_require_auth = ['login', 'register'].includes(url_slug)
+        if (url_slug_dont_require_auth && !!auth_token) Router.replace('/dashboard')
+        else if (!url_slug_dont_require_auth && !auth_token) Router.replace('/login')
     }, [])
 
     React.useEffect(() => {

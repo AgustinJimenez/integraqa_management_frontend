@@ -20,14 +20,13 @@ function* loginSaga({ email, password, rememberMe }: any = {}) {
         },
     })
 
-    if (error) {
-        showToast({
+    if (error)
+        return showToast({
             message: message,
             //title: login_response?.message,
             type: 'error',
         })
-        return
-    }
+
     yield put(setDatasetToReducer(data?.access_token, 'auth_token'))
 
     var { data, error, message }: any = yield call(request, {
