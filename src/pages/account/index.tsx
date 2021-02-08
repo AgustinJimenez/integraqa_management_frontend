@@ -38,7 +38,7 @@ const AccountPage = (props: any) => {
     React.useEffect(() => {}, [])
 
     return (
-        <AdminLayout>
+        <AdminLayout title='Account'>
             <Grid container spacing={3} justify='center' alignItems='center'>
                 <Grid item xs={3}>
                     <Paper className={classes.paper}>
@@ -53,11 +53,9 @@ const AccountPage = (props: any) => {
                                 <ListItemText
                                     primary='Email'
                                     secondary={
-                                        <>
-                                            <Typography component='span' variant='body2' className={classes.inline} color='textPrimary'>
-                                                {user.email}
-                                            </Typography>
-                                        </>
+                                        <Typography component='span' variant='body2' className={classes.inline} color='textPrimary'>
+                                            {user.email}
+                                        </Typography>
                                     }
                                 />
                             </ListItem>

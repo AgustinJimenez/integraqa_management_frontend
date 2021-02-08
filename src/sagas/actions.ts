@@ -15,10 +15,11 @@ export const requestSagaAction = (options: Options) => ({
     ...options,
 })
 
-export const authRegisterSagaAction = ({ email, password }: any = {}) => ({
+export const authRegisterSagaAction = ({ email, password, name }: any = {}) => ({
     type: AUTH_REGISTER_SAGA,
     email,
     password,
+    name,
 })
 
 export const authLoginSagaAction = ({ email, password, rememberMe }: any = {}) => ({

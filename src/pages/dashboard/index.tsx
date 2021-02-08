@@ -8,7 +8,7 @@ const LoginPage = (props: any) => {
 
     React.useEffect(() => {}, [])
 
-    return <AdminLayout></AdminLayout>
+    return <AdminLayout title='Dashboard'></AdminLayout>
 }
 
 export async function getStaticProps() {

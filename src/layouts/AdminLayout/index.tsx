@@ -33,7 +33,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 
 const ListItemLink = (props: any) => <ListItem button component='a' {...props} />
 
-const AdminLayout = ({ children }: any) => {
+const AdminLayout = ({ children, title = '' }: any) => {
     const dispatch = useDispatch()
     const user = useSelector((state: any) => datasetSelector(state, 'user'))
     /* 
@@ -77,7 +77,7 @@ const AdminLayout = ({ children }: any) => {
                             <MenuIcon />
                         </IconButton>
                         <Typography component='h1' variant='h6' color='inherit' noWrap className={classes.title}>
-                            Dashboard
+                            {title}
                         </Typography>
                         <Button
                             size='large'
@@ -86,7 +86,7 @@ const AdminLayout = ({ children }: any) => {
                             color='inherit'
                             onClick={e => changeAccountMenuStatus(e, !accountMenuIsOpen)}
                         >
-                            {user.name}
+                            {user?.name}
                         </Button>
                         <Popover
                             //id={id}

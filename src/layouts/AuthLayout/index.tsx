@@ -6,7 +6,6 @@ import Box from '@material-ui/core/Box'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import LoginForm from './LoginForm'
 import useStyles from './styles'
 import { datasetSelector } from '../../redux/selectors'
 import { useSelector } from 'react-redux'
@@ -23,7 +22,7 @@ const Copyright = () => (
     </Typography>
 )
 
-const AuthLayout = () => {
+const AuthLayout = ({ children, title = '' } = {}) => {
     const classes = useStyles()
     /* 
     const auth_token = useSelector(state => datasetSelector(state, 'auth_token'))
@@ -40,10 +39,10 @@ const AuthLayout = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component='h1' variant='h5'>
-                    Sign in
+                    {title}
                 </Typography>
                 <form className={classes.form} noValidate>
-                    <LoginForm />
+                    {children}
                 </form>
             </div>
             <Box mt={8}>

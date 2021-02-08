@@ -6,32 +6,38 @@ import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
 import { useDispatch, useSelector } from 'react-redux'
-import { authLoginSagaAction } from '../../sagas/actions'
+import { authLoginSagaAction, authRegisterSagaAction } from '../../sagas/actions'
 import useStyles from './styles'
+import AuthLayout from '../../layouts/AuthLayout'
 import emailIsValid from '../../utils/emailIsValid'
 import { datasetSelector } from '../../redux/selectors'
-import DeleteIcon from '@material-ui/icons/activity'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-const LoginForm = ({}) => {
+const RegisterForm = ({}) => {
     const dispatch = useDispatch()
     const classes = useStyles()
-    const is_loading_login_submit = useSelector(state => datasetSelector(state, 'is_loading_login_submit'))
-    const [rememberMe, setRememberMe] = React.useState(false)
+    const passwordRef: any = React.useRef(null)
     const [password, setPassword] = React.useState('')
     const [email, setEmail] = React.useState('')
-    const login = React.useCallback(() => {
+    const [name, setName] = React.useState('')
+    const is_loading_register_submit = useSelector(state => datasetSelector(state, 'is_loading_register_submit'))
+
+    const formIsValid = React.useMemo(() => {
+        return !!password && !!name && !!email && emailIsValid(email) && password.length >= 6 && !is_loading_register_submit
+    }, [email, name, password, is_loading_register_submit])
+
+    const submit = React.useCallback(() => {
         dispatch(
-            authLoginSagaAction({
+            authRegisterSagaAction({
                 email,
+                name,
                 password,
-                rememberMe,
             }),
         )
-    }, [email, password, rememberMe])
-    const loginFieldsAreValid = emailIsValid(email) && password.length > 3
+    }, [email, name, password])
 
     return (
-        <>
+        <AuthLayout title='Create a account'>
             <TextField
                 variant='outlined'
                 margin='normal'
@@ -49,6 +55,18 @@ const LoginForm = ({}) => {
                 margin='normal'
                 required
                 fullWidth
+                id='fullname'
+                label='Full Name'
+                name='name'
+                autoComplete='fullname'
+                onChange={event => setName(event.target.value)}
+            />
+            <TextField
+                inputRef={passwordRef}
+                variant='outlined'
+                margin='normal'
+                required
+                fullWidth
                 name='password'
                 label='Password'
                 type='password'
@@ -56,37 +74,18 @@ const LoginForm = ({}) => {
                 autoComplete='current-password'
                 onChange={event => setPassword(event.target.value)}
             />
-            <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Remember me'
-                checked={rememberMe}
-                onChange={event => setRememberMe(event.target.checked)}
-            />
-
-            <Button
-                fullWidth
-                variant='contained'
-                color='primary'
-                className={classes.submit}
-                onClick={() => login()}
-                disabled={!loginFieldsAreValid || is_loading_login_submit}
-            >
-                Sign In
+            <Button fullWidth variant='contained' color='primary' className={classes.submit} onClick={submit} disabled={!formIsValid}>
+                {is_loading_register_submit ? <CircularProgress color='primary' size={25} /> : 'Create Account'}
             </Button>
-
             <Grid container>
-                <Grid item xs>
-                    <Link href='#' variant='body2'>
-                        Forgot password?
-                    </Link>
-                </Grid>
+                <Grid item xs></Grid>
                 <Grid item>
-                    <Link href='#' variant='body2'>
-                        {"Don't have an account? Sign Up"}
+                    <Link href='login' variant='body2'>
+                        Already registered? Log In
                     </Link>
                 </Grid>
             </Grid>
-        </>
+        </AuthLayout>
     )
 }
-export default LoginForm
+export default RegisterForm
