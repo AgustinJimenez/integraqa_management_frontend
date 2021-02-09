@@ -1,11 +1,6 @@
 import React from 'react'
-import Router from 'next/router'
 
 const HomePage = (props: any) => {
-    React.useEffect(() => {
-        Router.replace('/dashboard')
-    }, [])
-
     return <></>
 }
 

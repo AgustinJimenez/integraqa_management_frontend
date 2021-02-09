@@ -1,8 +1,9 @@
 import React from 'react'
-const { withAxios } = require('react-axios')
 import { useSelector } from 'react-redux'
 import { datasetSelector } from '../redux/selectors'
 import Router from 'next/router'
+
+const urlSlugsWithoutAuth = ['login', 'register']
 
 const AuthProvider = ({ children }: any) => {
     //const dispatch = useDispatch()
@@ -14,11 +15,14 @@ const AuthProvider = ({ children }: any) => {
             .filter(s => !!s)
             .reverse()
 
-        let url_slug = url_nodes?.[0]
-        let url_slug_dont_require_auth = ['login', 'register'].includes(url_slug)
-        if (url_slug_dont_require_auth && !!auth_token) Router.replace('/dashboard')
-        else if (!url_slug_dont_require_auth && !auth_token) Router.replace('/login')
-    }, [])
+        let url_slug = url_nodes?.[0] || ''
+        let urlSlugRequiresAuth = !urlSlugsWithoutAuth.includes(url_slug)
+        let redirectToAdmin = urlSlugRequiresAuth && !!auth_token
+        let redirectToLogin = urlSlugRequiresAuth && !auth_token
+        //console.log('AuthProvider ===> ', { urlSlugRequiresAuth, auth_token, url_nodes, url_slug, redirectToAdmin, redirectToLogin })
+        if (redirectToAdmin) Router.replace('/dashboard')
+        else if (redirectToLogin) Router.replace('/login')
+    }, [auth_token])
 
     React.useEffect(() => {
         checkAuth()
