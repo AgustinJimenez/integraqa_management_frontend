@@ -12,6 +12,7 @@ import AuthLayout from '../../layouts/AuthLayout'
 import emailIsValid from '../../utils/emailIsValid'
 import { datasetSelector } from '../../redux/selectors'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { setDatasetToReducer } from '../../redux/actions'
 
 const RegisterForm = ({}) => {
     const dispatch = useDispatch()
@@ -21,7 +22,9 @@ const RegisterForm = ({}) => {
     const [email, setEmail] = React.useState('')
     const [name, setName] = React.useState('')
     const is_loading_register_submit = useSelector(state => datasetSelector(state, 'is_loading_register_submit'))
-
+    React.useEffect(() => {
+        dispatch(setDatasetToReducer(false, 'is_loading_register_submit'))
+    }, [])
     const formIsValid = React.useMemo(() => {
         return !!password && !!name && !!email && emailIsValid(email) && password.length >= 6 && !is_loading_register_submit
     }, [email, name, password, is_loading_register_submit])

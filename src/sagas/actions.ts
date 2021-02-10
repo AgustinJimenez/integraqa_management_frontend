@@ -5,6 +5,7 @@ export const AUTH_REGISTER_SAGA: string = 'AUTH_REGISTER_SAGA'
 export const AUTH_LOGIN_SAGA: string = 'AUTH_LOGIN_SAGA'
 export const AUTH_LOGOUT_SAGA: string = 'AUTH_LOGOUT_SAGA'
 export const REQUEST_SAGA: string = 'REQUEST_SAGA'
+export const EMAIL_CONFIRMATION_SAGA: string = 'EMAIL_CONFIRMATION_SAGA'
 
 export const sagaSearchMealAction = ({}: any = {}) => ({
     type: SAGA_SEARCH_MEAL,
@@ -31,4 +32,9 @@ export const authLoginSagaAction = ({ email, password, rememberMe }: any = {}) =
 
 export const authLogoutSagaAction = () => ({
     type: AUTH_LOGOUT_SAGA,
+})
+
+export const emailConfirmationSagaAction = ({ verification_code = '' }: any = {}) => ({
+    type: EMAIL_CONFIRMATION_SAGA,
+    verification_code,
 })

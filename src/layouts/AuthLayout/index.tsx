@@ -45,9 +45,6 @@ const AuthLayout = ({ children, title = '' } = {}) => {
                     {children}
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
         </Container>
     )
 }
