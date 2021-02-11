@@ -17,7 +17,6 @@ export interface Options extends AxiosRequestConfig {
 }
 
 const request = async (options: Options = { show_message: false, debug: false }) => {
-    console.log('HERE ===> ', i18n)
     var result: Response = { data: null, error: false, message: '', response: null }
 
     try {

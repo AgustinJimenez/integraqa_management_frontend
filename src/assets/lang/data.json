@@ -6,6 +6,30 @@
     "user_has_been_verified": {
         "en": "User has been verified.",
         "es": "El usuario se ha verificado."
+    },
+    "user_created_successful_email_sended": {
+        "en": "User has been created sucessfully, an confirmation email was sended.",
+        "es": "El usuario se ha creado correctamente, un email de confirmación ha sido enviado."
+    },
+    "user_already_exists": {
+        "en": "User already exists.",
+        "es": "El usuario ya existe."
+    },
+    "user_doesnt_exists": {
+        "en": "User does not exists.",
+        "es": "El usuario no existe."
+    },
+    "user_is_unabled": {
+        "en": "User is unabled.",
+        "es": "El usuario aun no esta habilitado."
+    },
+    "user_is_not_verified": {
+        "en": "User is not verified by email.",
+        "es": "El usuario aun no esta verificado por email."
+    },
+    "invalid_credentials": {
+        "en": "Invalid credentials.",
+        "es": "Credenciales inválidas."
     }
 
 }

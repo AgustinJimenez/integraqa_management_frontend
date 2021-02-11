@@ -22,7 +22,6 @@ function* emailConfirmation({ verification_code }: any = {}) {
     Router.replace('/login')
     if (!error)
         return showToast({
-            title: 'INFO',
             message: 'user_has_been_verified',
             type: 'success',
         })

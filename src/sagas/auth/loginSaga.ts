@@ -34,7 +34,6 @@ function* loginSaga({ email, password, rememberMe }: any = {}) {
     yield put(setDatasetToReducer(data, 'user'))
     showToast({
         message: 'Access granted',
-        title: 'INFO:',
         type: 'success',
     })
     Router.replace('/dashboard')
