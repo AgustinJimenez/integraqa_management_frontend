@@ -3,11 +3,9 @@ import { AUTH_LOGIN_SAGA } from '../actions'
 import { setDatasetToReducer } from '../../redux/actions'
 import { request } from '../requestSaga'
 import { NO_CONTENT, UNPROCESSABLE_ENTITY } from 'http-status'
-import { api_domain } from '../../../env.json'
 import Router from 'next/router'
 import { dashboardPageRouteProps } from '../../routes'
 import { showToast } from '../../utils/showToast'
-import capitalizeWords from '../../utils/capitalizeWords'
 
 function* loginSaga({ email, password, rememberMe }: any = {}) {
     var { data, error, message }: any = yield call(request, {

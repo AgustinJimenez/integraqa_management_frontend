@@ -1,0 +1,11 @@
+{
+    "user_is_already_verified": {
+        "en": "User is already verified.",
+        "es": "El usuario ya esta verificado."
+    },
+    "user_has_been_verified": {
+        "en": "User has been verified.",
+        "es": "El usuario se ha verificado."
+    }
+
+}

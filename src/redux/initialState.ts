@@ -5,6 +5,7 @@ const initialState: any = {
         is_loading_login_submit: false,
         is_loading_register_submit: false,
         is_loading_email_verification: false,
+        language: '',
     },
 }
 

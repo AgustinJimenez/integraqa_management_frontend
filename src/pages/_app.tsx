@@ -8,6 +8,7 @@ import AuthProvider from '../providers/AuthProvider'
 const { ToastContainer } = require('react-nextjs-toast')
 import { Loader } from '../components/Loader'
 import { createMuiTheme } from '@material-ui/core/styles'
+import { TranslationsProvider } from '../providers/TranslationsProvider'
 
 const theme = createMuiTheme({})
 
@@ -19,8 +20,10 @@ const App = ({ Component, pageProps }: any) => {
             <AxiosProvider>
                 <PersistGate loading={<Loader />} persistor={persistor}>
                     <AuthProvider>
-                        <Component {...pageProps} />
-                        <ToastContainer />
+                        <TranslationsProvider>
+                            <Component {...pageProps} />
+                            <ToastContainer />
+                        </TranslationsProvider>
                     </AuthProvider>
                 </PersistGate>
             </AxiosProvider>

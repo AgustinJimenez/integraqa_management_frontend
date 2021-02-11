@@ -21,12 +21,9 @@ export function* request(options: Options): object {
     options.headers = {
         ...options.headers,
         'Content-Type': 'application/json',
-        Accept: 'application/json, text/plain',
-        //'X-Requested-With': 'XMLHttpRequest',
+        Accept: 'application/json',
     }
-    if (!!auth_token) {
-        options.headers['Authorization'] = `Bearer ${auth_token}`
-    }
+    if (!!auth_token) options.headers['Authorization'] = `Bearer ${auth_token}`
 
     let result: Response = yield call(http_request, options)
 

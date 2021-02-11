@@ -14,26 +14,25 @@ import { datasetSelector } from '../../redux/selectors'
 import { select } from 'redux-saga/effects'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-const EmailConfirmation = (props: any) => {
+const EmailConfirmationPage = (props: any) => {
     const router = useRouter()
     const is_loading_email_verification = select(state => datasetSelector(state, 'is_loading_email_verification'))
     const verification_code: string | string[] = router.query?.vc
+    //console.log('EmailConfirmationPage ===> ', { verification_code, router, query: router.query })
     const dispatch = useDispatch()
     const classes = useStyles()
     React.useEffect(() => {
-        dispatch(
-            emailConfirmationSagaAction({
-                verification_code,
-            }),
-        )
-    }, [])
+        if (!!verification_code)
+            dispatch(
+                emailConfirmationSagaAction({
+                    verification_code,
+                }),
+            )
+    }, [verification_code])
 
     return (
         <AuthLayout title='Email Verification'>
             <Grid container>
-                <Grid container item md={12} justify='center' alignItems='center'>
-                    <h2>Verification Code!!!</h2>
-                </Grid>
                 <Grid container item md={12} justify='center' alignItems='center'>
                     {is_loading_email_verification && <CircularProgress color='primary' size={25} />}
                 </Grid>
@@ -47,4 +46,4 @@ export async function getStaticProps() {
     //console.log('HOMEPAGE-response ===> ', { data, error, message })
     return { props: {} }
 }
-export default EmailConfirmation
+export default EmailConfirmationPage
