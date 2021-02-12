@@ -8,8 +8,7 @@ import { showToast } from '../../utils/showToast'
 
 function* registerSaga({ email, password, name }: any = {}) {
     yield put(setDatasetToReducer(true, 'is_loading_register_submit'))
-    let is_loading_register_submit: boolean = yield select(state => datasetSelector(state, 'is_loading_register_submit'))
-    var { error, data, response }: any = yield request({
+    var { error }: any = yield request({
         method: 'POST',
         url: 'auth/register',
         //debug: true,
@@ -20,16 +19,15 @@ function* registerSaga({ email, password, name }: any = {}) {
         },
         show_message: true,
     })
-    console.log('REGISTER SAGA !!!', { email, name, password, response, error })
     yield put(setDatasetToReducer(false, 'is_loading_register_submit'))
 
-    if (!error)
+    if (!error) {
         showToast({
             message: 'user_created_successful_email_sended',
             type: 'success',
         })
-
-    Router.replace('/login')
+        Router.replace('/login')
+    }
 }
 
 export default function* saga() {

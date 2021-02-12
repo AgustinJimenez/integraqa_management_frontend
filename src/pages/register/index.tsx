@@ -21,12 +21,12 @@ const RegisterForm = ({}) => {
     const [password, setPassword] = React.useState('')
     const [email, setEmail] = React.useState('')
     const [name, setName] = React.useState('')
-    const is_loading_register_submit = useSelector(state => datasetSelector(state, 'is_loading_register_submit'))
+    const is_loading_register_submit = useSelector((state: any) => datasetSelector(state, 'is_loading_register_submit'))
     React.useEffect(() => {
         dispatch(setDatasetToReducer(false, 'is_loading_register_submit'))
     }, [])
     const formIsValid = React.useMemo(() => {
-        return !!password && !!name && !!email && emailIsValid(email) && password.length >= 6 && !is_loading_register_submit
+        return !!password && !!name && !!email && name?.length >= 3 && emailIsValid(email) && password.length >= 6 && !is_loading_register_submit
     }, [email, name, password, is_loading_register_submit])
 
     const submit = React.useCallback(() => {

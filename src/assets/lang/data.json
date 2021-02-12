@@ -30,6 +30,10 @@
     "invalid_credentials": {
         "en": "Invalid credentials.",
         "es": "Credenciales inválidas."
+    },
+    "cant_send_confirmation_email": {
+        "en": "Can't send confirmation email.",
+        "es": "No se puede enviar email de confirmación."
     }
 
 }
