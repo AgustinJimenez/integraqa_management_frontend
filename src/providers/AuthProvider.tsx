@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { datasetSelector } from '../redux/selectors'
 import Router from 'next/router'
 
-const urlSlugsWithoutAuth = ['login', 'register', 'email_confirmation']
+const urlSlugsWithoutAuth = ['login', 'register', 'email_confirmation', 'password_recovery', 'password_reset']
 
 const AuthProvider = ({ children }: any) => {
     //const dispatch = useDispatch()

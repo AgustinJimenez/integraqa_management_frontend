@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 const AccountPage = (props: any) => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const user = useSelector((state: any) => datasetSelector(state, 'user'))
+    const user = useSelector((state: any) => datasetSelector(state, 'user')) || {}
     console.log('AccountPage ===> ', user)
     React.useEffect(() => {}, [])
 

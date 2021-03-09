@@ -4,8 +4,8 @@
         "es": "El usuario ya esta verificado."
     },
     "user_has_been_verified": {
-        "en": "User has been verified.",
-        "es": "El usuario se ha verificado."
+        "en": "User has been verified, an administrator will enable the user soon.",
+        "es": "El usuario se ha verificado, un administrador habilitará el usuario pronto."
     },
     "user_created_successful_email_sended": {
         "en": "User has been created sucessfully, an confirmation email was sended.",
@@ -20,7 +20,7 @@
         "es": "El usuario no existe."
     },
     "user_is_unabled": {
-        "en": "User is unabled.",
+        "en": "User is not enabled yet.",
         "es": "El usuario aun no esta habilitado."
     },
     "user_is_not_verified": {
@@ -34,6 +34,30 @@
     "cant_send_confirmation_email": {
         "en": "Can't send confirmation email.",
         "es": "No se puede enviar email de confirmación."
+    },
+    "password_recovery_email_was_sended": {
+        "en": "A recovery link was sended, check your email.",
+        "es": "Un link de recuperación fue enviado, revisa tu email."
+    },
+    "the_email_not_registered": {
+        "en": "The email is not registered.",
+        "es": "El email no esta registrado."
+    },
+    "cant_send_password_recovery_email": {
+        "en": "Can not send password recovery email.",
+        "es": "No se pudo enviar el email de recuperación de constraseña."
+    },
+    "the_code_is_invalid": {
+        "en": "The code is invalid.",
+        "es": "El código es invalido."
+    },
+    "there_is_a_problem_with_the_code": {
+        "en": "There is a problem with the provided code.",
+        "es": "Hay un problema con el código utilizado."
+    },
+    "password_updated_correctly": {
+        "en": "Password updated correctly.",
+        "es": "Contraseña actualizada correctamente."
     }
-
+    
 }

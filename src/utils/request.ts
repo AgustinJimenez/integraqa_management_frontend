@@ -16,7 +16,7 @@ export interface Options extends AxiosRequestConfig {
     debug?: boolean;
 }
 
-const request = async (options: Options = { show_message: false, debug: false }) => {
+const request = async (options: Options = { show_message: false, debug: false }): Response => {
     var result: Response = { data: null, error: false, message: '', response: null }
 
     try {

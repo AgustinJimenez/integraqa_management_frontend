@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
 import useStyles from './styles'
 import { datasetSelector } from '../../redux/selectors'
 import { useSelector } from 'react-redux'
@@ -34,7 +35,7 @@ const AuthLayout = ({ children, title = '' } = {}) => {
     return (
         <Container component='main' maxWidth='xs'>
             <CssBaseline />
-            <div className={classes.paper}>
+            <Grid container className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
@@ -44,7 +45,7 @@ const AuthLayout = ({ children, title = '' } = {}) => {
                 <form className={classes.form} noValidate>
                     {children}
                 </form>
-            </div>
+            </Grid>
         </Container>
     )
 }

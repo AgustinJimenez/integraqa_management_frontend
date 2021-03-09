@@ -77,7 +77,7 @@ const LoginPage = (props: any) => {
 
             <Grid container>
                 <Grid item xs>
-                    <Link href='#' variant='body2'>
+                    <Link href='password_recovery' variant='body2'>
                         Forgot password?
                     </Link>
                 </Grid>

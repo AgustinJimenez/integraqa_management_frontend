@@ -15,7 +15,7 @@ function* authCheck(response: any) {
     }
 }
 
-export function* request(options: Options): object {
+export function* request(options: Options): Response {
     const auth_token = yield select(state => datasetSelector(state, 'auth_token'))
 
     options.headers = {
@@ -25,7 +25,7 @@ export function* request(options: Options): object {
     }
     if (!!auth_token) options.headers['Authorization'] = `Bearer ${auth_token}`
 
-    let result: Response = yield call(http_request, options)
+    const result: Response = yield call(http_request, options)
 
     yield call(authCheck, result['response'])
 
