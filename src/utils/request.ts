@@ -14,6 +14,7 @@ export interface Response {
 export interface Options extends AxiosRequestConfig {
     show_message?: boolean;
     debug?: boolean;
+    auth_token?: string;
 }
 
 const request = async (options: Options = { show_message: false, debug: false }): Response => {

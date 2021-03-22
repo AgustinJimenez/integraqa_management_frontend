@@ -8,8 +8,12 @@ import emailConfirmationSaga from './auth/emailConfirmationSaga'
 import passwordRecoverySaga from './auth/passwordRecoverySaga'
 import passwordResetSaga from './auth/passwordResetSaga'
 import passwordResetCodeCheckSaga from './auth/passwordResetCodeCheckSaga'
+import tableSaga from '../components/Table/saga'
+
+import usersPageSaga from '../pages/users/saga'
 
 const allSagas: any[] = [
+    tableSaga(),
     registerSaga(),
     loginSaga(),
     requestSaga(),
@@ -18,6 +22,7 @@ const allSagas: any[] = [
     passwordRecoverySaga(),
     passwordResetSaga(),
     passwordResetCodeCheckSaga(),
+    usersPageSaga(),
 ]
 
 export default function* rootSaga() {

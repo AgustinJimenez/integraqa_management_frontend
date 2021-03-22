@@ -1,34 +1,57 @@
-import { DELETE_ITEM_FROM_DATASET_LIST_REDUCER, SET_ITEM_TO_DATASET_LIST_REDUCER, SET_ITEM_TO_DATASET_REDUCER } from './actions'
+import { SET_ITEM_TO_DATASET_REDUCER } from './actions'
 import initialState from './initialState'
 
-const debug: boolean = false
+const itemToDataset = (state: any, action: any) => {
+    let { data, dataset_name, options = { key: '' } } = action
 
-const datasetReducer = (state: any = initialState, action: any) => {
-    let { type, data, dataset_name, options = { key: '', keyName: 'id', replaceList: false } } = action
-    let keyName: string = options.keyName
-    if (debug) console.log('REDUCERS - datasetReducer ===> ', { action })
-    //throw 'REDUCER FETCH NAME IS REQUIRED'
+    if (!dataset_name) throw 'dataset_name is required'
 
-    switch (type) {
+    if (!!options['key']) state[dataset_name][options.key] = data
+    else state[dataset_name] = data
+
+    state = { ...state }
+    if (action?.['options']?.['debug']) console.log('REDUCERS - itemToDataset ===> ', { data, state })
+    return state
+}
+
+const itemToDatasetList = (state: any, action: any) => {
+    let { data, dataset_name } = action
+    if (!Array.isArray(data)) data = [data]
+
+    for (let item of data)
+        if (!!item['id']) {
+            if (!state[dataset_name]) state[dataset_name] = {}
+            state[dataset_name][item.id] = item
+        }
+    if (action?.['options']?.['debug']) console.log('REDUCERS - itemToDatasetList ===> ', { data, state })
+    state = { ...state }
+
+    return state
+}
+
+const multipleItemsToDataset = (state: any, action: any) => {
+    for (let act of action['actions']) state = datasetHandler(state, act)
+    return state
+}
+
+const datasetHandler = (state: any, action: any) => {
+    if (action?.['options']?.['debug']) console.log('REDUCERS - datasetHandler ===> ', { action })
+
+    let { type = 'single', multiple = false, replace_list = false } = action['options']
+
+    if (multiple) state = multipleItemsToDataset(state, action)
+    else if (type === 'list') state = itemToDatasetList(state, action)
+    else if (type === 'single') state = itemToDataset(state, action)
+
+    return state
+}
+
+let datasetReducer = (state = initialState, action: any) => {
+    if (action?.['options']?.['debug']) console.log('REDUCERS - datasetReducer ===> ', { action })
+
+    switch (action.type) {
         case SET_ITEM_TO_DATASET_REDUCER:
-            if (!dataset_name) state = { ...state, ...data }
-            else if (!!options['key']) state[dataset_name][options.key] = data
-            else state[dataset_name] = data
-            state = { ...state }
-            break
-
-        case SET_ITEM_TO_DATASET_LIST_REDUCER:
-            if (!Array.isArray(data)) data = [data]
-            if (options.replaceList) state[dataset_name] = {}
-            for (let item of data) if (!!item[keyName] && !!state[dataset_name]) state[dataset_name][item[keyName]] = item
-
-            state = { ...state }
-            break
-        case DELETE_ITEM_FROM_DATASET_LIST_REDUCER:
-            if (!!data[keyName] && !!state[dataset_name] && !!state[dataset_name][data[keyName]]) {
-                delete state[dataset_name][data[keyName]]
-                state = { ...state }
-            }
+            state = datasetHandler(state, action)
             break
     }
     return state

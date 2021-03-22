@@ -1,6 +1,6 @@
 import { Options } from '../utils/request'
 
-export const SAGA_SEARCH_MEAL: string = 'SAGA_SEARCH_MEAL'
+export const TABLE_LOAD_SAGA: string = 'TABLE_LOAD_SAGA'
 export const AUTH_REGISTER_SAGA: string = 'AUTH_REGISTER_SAGA'
 export const AUTH_LOGIN_SAGA: string = 'AUTH_LOGIN_SAGA'
 export const AUTH_LOGOUT_SAGA: string = 'AUTH_LOGOUT_SAGA'
@@ -9,9 +9,12 @@ export const EMAIL_CONFIRMATION_SAGA: string = 'EMAIL_CONFIRMATION_SAGA'
 export const PASSWORD_RECOVERY_SAGA: string = 'PASSWORD_RECOVERY_SAGA'
 export const PASSWORD_RESET_SAGA: string = 'PASSWORD_RESET_SAGA'
 export const PASSWORD_RESET_CODE_CHECK_SAGA: string = 'PASSWORD_RESET_CODE_CHECK_SAGA'
+export const USERS_PAGE_SAGA: string = 'USERS_PAGE_SAGA'
 
-export const sagaSearchMealAction = ({}: any = {}) => ({
-    type: SAGA_SEARCH_MEAL,
+export const tableLoadSagaAction = ({ dataset_name = '', url = '' }) => ({
+    type: TABLE_LOAD_SAGA,
+    dataset_name,
+    url,
 })
 
 export const requestSagaAction = (options: Options) => ({
@@ -56,4 +59,8 @@ export const passwordResetCodeCheckSagaAction = ({ reset_code = '', callback = (
     type: PASSWORD_RESET_CODE_CHECK_SAGA,
     reset_code,
     callback,
+})
+
+export const usersPageSagaAction = () => ({
+    type: USERS_PAGE_SAGA,
 })

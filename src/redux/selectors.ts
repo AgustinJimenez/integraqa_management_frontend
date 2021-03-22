@@ -1,19 +1,31 @@
-const getDataset = (state: any, datasetName: string) => state['datasets'][datasetName]
+import collect from 'collect.js'
 
-export const datasetSelector = (state: string, datasetName: string, { list_format = false, ids = null, id = -1 }: any = {}) => {
-    //console.log('datasetSelector start ===> ', { datasetName, list_format, ids, id })
+const getDataset = (state: any, datasetName: string): any => state['datasets'][datasetName]
+
+const isArray = (val: any) => Array.isArray(val)
+
+export const datasetSelector = (state: any, datasetName: string, { id = -1 || [], list_type = 'array' || 'collection', debug = false } = {}) => {
     let selected_dataset = getDataset(state, datasetName)
-    if (!!id && id !== -1) return selected_dataset[id]
-    else if (!!ids && Array.isArray(ids)) {
-        let filtereds: any = {}
-        for (let id of ids)
-            if (!!selected_dataset[id]) {
-                filtereds[id] = selected_dataset[id]
-            }
-        selected_dataset = filtereds
+    if (debug) console.log('datasetSelector raw data ===> ', { selected_dataset })
+    if (!!id && id !== -1) {
+        if (isArray(id)) selected_dataset = id.filter((key: any) => !!selected_dataset[key]).map((key: any) => selected_dataset[key])
+        else selected_dataset = selected_dataset[id]
     }
-    //console.log('datasetSelector mid ===> ', { selected_dataset })
-    if (list_format) return Object.keys(selected_dataset || {}).map(id => selected_dataset[id])
+
+    switch (list_type) {
+        case 'collection':
+            selected_dataset = collect(selected_dataset)
+            break
+
+        case 'array':
+            if (typeof selected_dataset === 'object') selected_dataset = Object.keys(selected_dataset).map((key: any) => selected_dataset[key])
+            break
+
+        default:
+            break
+    }
+
+    if (debug) console.log('datasetSelector end ===> ', { datasetName, id, list_type, selected_dataset })
 
     return selected_dataset
 }

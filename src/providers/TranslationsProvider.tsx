@@ -6,8 +6,7 @@ import { I18nextProvider } from 'react-i18next'
 import './i18n.ts'
 
 export const TranslationsProvider = ({ children }: any) => {
-    const language = useSelector((state: any) => datasetSelector(state, 'language'))
-
+    const language: string = useSelector((state: any) => datasetSelector(state, 'language'))
     React.useEffect(() => {
         if (!!language) {
             i18n.changeLanguage(language)

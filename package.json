@@ -34,6 +34,7 @@
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.4",
     "clsx": "^1.1.1",
+    "collect.js": "^4.28.6",
     "html-loader": "^0.5.5",
     "http-status": "^1.5.0",
     "i18next": "^19.8.7",

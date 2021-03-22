@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux'
 import { datasetSelector } from '../redux/selectors'
 import Router from 'next/router'
 
-const urlSlugsWithoutAuth = ['login', 'register', 'email_confirmation', 'password_recovery', 'password_reset']
+const urlSlugsWithoutAuth = ['', 'login', 'register', 'email_confirmation', 'password_recovery', 'password_reset']
+
+const debug: boolean = false
 
 const AuthProvider = ({ children }: any) => {
     //const dispatch = useDispatch()
@@ -16,12 +18,19 @@ const AuthProvider = ({ children }: any) => {
             .reverse()
 
         let url_slug = url_nodes?.[0] || ''
-        let urlSlugRequiresAuth = !urlSlugsWithoutAuth.includes(url_slug)
-        let redirectToAdmin = urlSlugRequiresAuth && !!auth_token
-        let redirectToLogin = urlSlugRequiresAuth && !auth_token
-        //console.log('AuthProvider ===> ', { urlSlugRequiresAuth, auth_token, url_nodes, url_slug, redirectToAdmin, redirectToLogin })
-        if (redirectToAdmin) Router.replace('/dashboard')
-        else if (redirectToLogin) Router.replace('/login')
+        if (!url_slug) {
+            if (!auth_token) Router.replace('/login')
+            else Router.replace('/dashboard')
+            return
+        }
+        let pageRequiresAuth = !urlSlugsWithoutAuth.includes(url_slug)
+        let redirectToLogin = pageRequiresAuth && !auth_token
+
+        //console.log('AuthProvider ===> ', { urlSlugRequiresAuth: pageRequiresAuth, auth_token, url_nodes, url_slug, redirectToLogin })
+        if (redirectToLogin) {
+            if (debug) console.log('AuthProvider ==> redirect to /login', { pageRequiresAuth, redirectToLogin, url_slug, auth_token })
+            Router.replace('/login')
+        }
     }, [auth_token])
 
     React.useEffect(() => {
