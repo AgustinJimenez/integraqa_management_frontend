@@ -19,6 +19,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { tableLoadSagaAction } from '../../sagas/actions'
 import { datasetSelector } from '../../redux/selectors'
 import { TABLE_DATASET_NAME } from '../../constants'
+import CheckBoxOutlinedIcon from '@material-ui/icons/CheckBoxOutlined'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import moment from 'moment'
 
 function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
     return { name, calories, fat, carbs, protein }
@@ -89,7 +92,16 @@ const rows = [
 
 const headers = ['First', 'Second', 'Third', 'Four', 'Five']
 
-const AppTable = ({ dataset_name, url }: any) => {
+const TableCellValue = ({ value, type }: any) => {
+    if (type === 'date') return <>{moment(value).format('DD/MM/YYYY')}</>
+    else if (typeof value === 'boolean') return <>{!!value ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankIcon />}</>
+
+    return <>{value}</>
+}
+
+const AppTable = ({ dataset_name, url, columns }: any) => {
+    const columnsFieldNames = Object.keys(columns)
+    const columnsFieldLabels = columnsFieldNames.map((field_name: string) => columns[field_name]['label'])
     const dispatch = useDispatch()
     const classes = useStyles()
     const tableDataset = useSelector(state => datasetSelector(state, TABLE_DATASET_NAME(dataset_name), { list_type: 'array' }))
@@ -113,24 +125,24 @@ const AppTable = ({ dataset_name, url }: any) => {
         loadTable()
     }, [])
 
-    console.log('AppTable ===> ', { datasetData })
+    console.log('AppTable ===> ', { datasetData, columns, columnsLabels: columnsFieldLabels, columnsFieldNames })
 
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} /* size='small' */ aria-label='a dense table'>
                 <TableHead>
                     <TableRow>
-                        {headers.map((header, key) => (
-                            <TableCell key={key}>{header}</TableCell>
+                        {columnsFieldLabels.map((label, key) => (
+                            <TableCell key={key}>{label}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row: any, key: number) => (
+                    {datasetData.map((row: any, key: number) => (
                         <TableRow key={key}>
-                            {Object.keys(row).map((field_name: string, key2: number) => (
+                            {columnsFieldNames.map((field_name: string, key2: number) => (
                                 <TableCell component='th' scope='row' key={key2}>
-                                    {row[field_name]}
+                                    <TableCellValue value={row[field_name]} type={columns[field_name]['type']} />
                                 </TableCell>
                             ))}
                         </TableRow>

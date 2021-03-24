@@ -19,7 +19,17 @@ const UsersPage = (props: any) => {
     return (
         <AdminLayout title='Users'>
             <Grid container>
-                <AppTable dataset_name='users' url='users' />
+                <AppTable
+                    dataset_name='users'
+                    url='users'
+                    columns={{
+                        name: { label: 'Nombre' },
+                        email: { label: 'Email' },
+                        enabled: { label: 'Habilitado' },
+                        utr: { label: 'RUC' },
+                        email_verified_at: { label: 'Fecha de verificado', type: 'date' },
+                    }}
+                />
             </Grid>
         </AdminLayout>
     )
