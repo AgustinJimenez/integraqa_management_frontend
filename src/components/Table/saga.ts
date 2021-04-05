@@ -16,13 +16,17 @@ type TableType = {
     total?: number,
 }
 
-function* tableSaga({ url = '', dataset_name = '' }) {
+function* tableLoad({ url = '', dataset_name = '', rows_per_page = 5, page_number = 1 }) {
     const tableDatasetName: string = TABLE_DATASET_NAME(dataset_name)
     let tableDataset: any = select(state => datasetSelector(state, tableDatasetName))
     tableDataset['is_loading'] = true
     yield put(setDatasetToReducer(tableDataset, tableDataset))
     const { error, data } = yield request({
         url,
+        params: {
+            rows_per_page,
+            page_number,
+        },
         //debug: true,
     })
     if (!error) {
@@ -42,5 +46,5 @@ function* tableSaga({ url = '', dataset_name = '' }) {
 }
 
 export default function* saga() {
-    yield takeLatest(TABLE_LOAD_SAGA, tableSaga)
+    yield takeLatest(TABLE_LOAD_SAGA, tableLoad)
 }

@@ -10,10 +10,11 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 import LastPageIcon from '@material-ui/icons/LastPage'
 import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import TablePagination from '@material-ui/core/TablePagination'
 import TableFooter from '@material-ui/core/TableFooter'
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import useStyles from './styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { tableLoadSagaAction } from '../../sagas/actions'
@@ -36,96 +37,55 @@ const useStylesTablePagination = makeStyles((theme: Theme) =>
     }),
 )
 
-interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onChangePage: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
-}
-
-const TablePaginationActions = (props: TablePaginationActionsProps) => {
-    const classes = useStylesTablePagination()
-    const theme = useTheme()
-    const { count, page, rowsPerPage, onChangePage } = props
-
-    const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, 0)
-    }
-
-    const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, page - 1)
-    }
-
-    const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, page + 1)
-    }
-
-    const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
-    }
-
-    return (
-        <div className={classes.root}>
-            <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label='first page'>
-                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label='previous page'>
-                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-            </IconButton>
-            <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label='next page'>
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </IconButton>
-            <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label='last page'>
-                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-            </IconButton>
-        </div>
-    )
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-]
-
-const headers = ['First', 'Second', 'Third', 'Four', 'Five']
-
 const TableCellValue = ({ value, type }: any) => {
-    if (type === 'date') return <>{moment(value).format('DD/MM/YYYY')}</>
-    else if (typeof value === 'boolean') return <>{!!value ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankIcon />}</>
+    if (type === 'date') return moment(value).format('DD/MM/YYYY')
+    else if (typeof value === 'boolean') return <>{!!value ? <CheckBoxOutlinedIcon color='primary' /> : <CheckBoxOutlineBlankIcon color='primary' />}</>
 
-    return <>{value}</>
+    return value
 }
 
 const AppTable = ({ dataset_name, url, columns }: any) => {
+    const tableDatasetName: string = TABLE_DATASET_NAME(dataset_name)
     const columnsFieldNames = Object.keys(columns)
     const columnsFieldLabels = columnsFieldNames.map((field_name: string) => columns[field_name]['label'])
     const dispatch = useDispatch()
     const classes = useStyles()
-    const tableDataset = useSelector(state => datasetSelector(state, TABLE_DATASET_NAME(dataset_name), { list_type: 'array' }))
+    const tablePaginationClasses = useStylesTablePagination()
+    const tableDataset = useSelector(state => datasetSelector(state, tableDatasetName, { default_value: {} }))
     const datasetData = useSelector(state => datasetSelector(state, dataset_name, { list_type: 'array', id: tableDataset['data_ids'] }))
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(5)
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
-    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-        setPage(newPage)
-    }
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10))
-        setPage(0)
-    }
-
-    const loadTable = React.useCallback(() => {
-        dispatch(tableLoadSagaAction({ dataset_name, url }))
+    const page = tableDataset['current_page'] || 0
+    const rowsPerPage = tableDataset?.['per_page'] || 5
+    const loadTable = React.useCallback(({ rows_per_page, page_number } = {}) => {
+        dispatch(tableLoadSagaAction({ dataset_name, url, rows_per_page, page_number }))
     }, [])
+
+    const handleBackButtonClick = React.useCallback(() => {
+        loadTable({ page_number: tableDataset['current_page'] - 1 })
+    }, [tableDataset])
+
+    const handleNextButtonClick = React.useCallback(() => {
+        loadTable({ page_number: tableDataset['current_page'] + 1 })
+    }, [tableDataset])
+    const handleFirstPageButtonClick = React.useCallback(() => {
+        loadTable({ page_number: 0 })
+    }, [])
+
+    const handleLastPageButtonClick = React.useCallback(() => {
+        loadTable({ page_number: tableDataset['last_page'] })
+    }, [tableDataset])
 
     React.useEffect(() => {
         loadTable()
     }, [])
 
-    console.log('AppTable ===> ', { datasetData, columns, columnsLabels: columnsFieldLabels, columnsFieldNames })
+    const handleChangeRowsPerPage = React.useCallback(
+        (event: any) => {
+            loadTable({ rows_per_page: +event.target.value, page_number: tableDataset['last_page'] })
+        },
+        [tableDataset],
+    )
+
+    //console.log('AppTable ===> ', { datasetData, tableDataset, columns, columnsLabels: columnsFieldLabels, columnsFieldNames })
 
     return (
         <TableContainer component={Paper}>
@@ -133,7 +93,11 @@ const AppTable = ({ dataset_name, url, columns }: any) => {
                 <TableHead>
                     <TableRow>
                         {columnsFieldLabels.map((label, key) => (
-                            <TableCell key={key}>{label}</TableCell>
+                            <TableCell key={key}>
+                                <Typography component='b' color='primary'>
+                                    {label}
+                                </Typography>
+                            </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
@@ -151,18 +115,40 @@ const AppTable = ({ dataset_name, url, columns }: any) => {
                 <TableFooter>
                     <TableRow>
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[5, 10, 25]}
+                            page={tableDataset['current_page'] - 1}
+                            rowsPerPage={tableDataset['per_page']}
+                            count={tableDataset['total']}
                             colSpan={3}
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
                             SelectProps={{
                                 inputProps: { 'aria-label': 'rows per page' },
                                 native: true,
                             }}
-                            onChangePage={handleChangePage}
                             onChangeRowsPerPage={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
+                            ActionsComponent={() => (
+                                <div className={tablePaginationClasses.root}>
+                                    <IconButton onClick={handleFirstPageButtonClick} disabled={tableDataset['current_page'] === 1} aria-label='first page'>
+                                        <FirstPageIcon color='primary' />
+                                    </IconButton>
+                                    <IconButton onClick={handleBackButtonClick} disabled={tableDataset['current_page'] === 1} aria-label='previous page'>
+                                        <KeyboardArrowLeft color='primary' />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={handleNextButtonClick}
+                                        disabled={tableDataset['current_page'] > tableDataset['last_page']}
+                                        aria-label='next page'
+                                    >
+                                        <KeyboardArrowRight color='primary' />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={handleLastPageButtonClick}
+                                        disabled={tableDataset['current_page'] === tableDataset['last_page']}
+                                        aria-label='last page'
+                                    >
+                                        <LastPageIcon color='primary' />
+                                    </IconButton>
+                                </div>
+                            )}
                         />
                     </TableRow>
                 </TableFooter>

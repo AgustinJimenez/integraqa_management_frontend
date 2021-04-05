@@ -11,10 +11,12 @@ export const PASSWORD_RESET_SAGA: string = 'PASSWORD_RESET_SAGA'
 export const PASSWORD_RESET_CODE_CHECK_SAGA: string = 'PASSWORD_RESET_CODE_CHECK_SAGA'
 export const USERS_PAGE_SAGA: string = 'USERS_PAGE_SAGA'
 
-export const tableLoadSagaAction = ({ dataset_name = '', url = '' }) => ({
+export const tableLoadSagaAction = ({ dataset_name = '', url = '', rows_per_page = 5, page_number = 1 }) => ({
     type: TABLE_LOAD_SAGA,
     dataset_name,
     url,
+    rows_per_page,
+    page_number,
 })
 
 export const requestSagaAction = (options: Options) => ({

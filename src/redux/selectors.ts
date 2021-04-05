@@ -4,7 +4,11 @@ const getDataset = (state: any, datasetName: string): any => state['datasets'][d
 
 const isArray = (val: any) => Array.isArray(val)
 
-export const datasetSelector = (state: any, datasetName: string, { id = -1 || [], list_type = 'array' || 'collection', debug = false } = {}) => {
+export const datasetSelector = (
+    state: any,
+    datasetName: string,
+    { id = -1 || [], list_type = 'none' || 'array' || 'collection', debug = false, default_value = null } = {},
+) => {
     let selected_dataset = getDataset(state, datasetName)
     if (debug) console.log('datasetSelector raw data ===> ', { selected_dataset })
     if (!!id && id !== -1) {
@@ -26,6 +30,8 @@ export const datasetSelector = (state: any, datasetName: string, { id = -1 || []
     }
 
     if (debug) console.log('datasetSelector end ===> ', { datasetName, id, list_type, selected_dataset })
+
+    if (selected_dataset === undefined) selected_dataset = default_value
 
     return selected_dataset
 }
